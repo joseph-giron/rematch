@@ -7,7 +7,6 @@ python-targets:
   - 3
 
 requirements:
-  - setup.py
   - server/requirements.txt
 
 test-warnings: true
