@@ -4,8 +4,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -qy apt-utils
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --fix-missing -yq tmux git python-dev \
           python-mysqldb build-essential libmysqlclient-dev python-pip \
-          python-numpy python-sklearn netcat-traditional libmysqlclient-dev \
-          mysql-client-5.5 rabbitmq-server nginx 
+          python-numpy python-sklearn netcat-traditional \
+          mysql-client-5.5 rabbitmq-server nginx
 RUN DEBIAN_FRONTEND=noninteractive apt-get clean
 RUN DEBIAN_FRONTEND=noninteractive apt-get autoremove -yq
 RUN mkdir /rematch_server
