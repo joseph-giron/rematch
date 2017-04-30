@@ -32,7 +32,6 @@ services:
     restart: always
 
   web:
-    image: django
     hostname: web
     build: .
     command: bash -c "/rematch_server/start_docker.sh"
