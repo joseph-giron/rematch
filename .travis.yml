@@ -54,8 +54,8 @@ install:
     fi;
   - if [ ${ENV} = "docker" ]; then
       cd ${PROJECT} ;
-      docker-compose build ;
       service docker start ;
+      docker-compose build ;
       docker-compose up ;
     fi;
   - if [ -f ${PROJECT}/requirements.txt ]; then pip install -r ${PROJECT}/requirements.txt ; fi
