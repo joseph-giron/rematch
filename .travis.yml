@@ -64,6 +64,7 @@ install:
   - pip install pytest-cov coveralls
 
 before_script:
+  - ps aux | grep mysql
   - if [ ${PROJECT} = "server" ]; then mysql -e 'SHOW VARIABLES LIKE "%version%";' ; fi;
 
 script:

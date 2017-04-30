@@ -6,9 +6,6 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=mypass
-    ports:
-      - "15672:15672"
-      - "5672:5672"
     expose:
       - 5672
       - 15672
@@ -25,8 +22,6 @@ services:
       - MYSQL_DATABASE=rematch
       - MYSQL_REMATCH_HOST=db
       - MYSQL_REMATCH_PORT=3306
-    ports:
-      - "3306:3306"
     expose:
      - 3306
     restart: always
