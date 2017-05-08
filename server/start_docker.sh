@@ -2,7 +2,7 @@
 if [[ ! -d './rematch/migrations' ]];
 then
   echo "first time, migrating"
-  python manage.my makemigrations collab
+  python manage.py makemigrations collab
   python manage.py migrate
 fi
 ./start_celery.sh &
