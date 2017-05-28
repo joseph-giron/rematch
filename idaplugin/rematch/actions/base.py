@@ -128,10 +128,11 @@ class IDAAction(Action, ida_kernwin.action_handler_t):
                               submit_handler=self.submit_handler,
                               response_handler=self.response_handler,
                               exception_handler=self.exception_handler)
-      if self.finish_handler:
-        self.ui.finished.connect(self.finish_handler)
-      self.ui.finished.connect(self.close_dialog)
-      self.ui.finished.connect(self.force_update)
+      if hasattr(self.ui, 'finished'):
+        if self.finish_handler:
+          self.ui.finished.connect(self.finish_handler)
+        self.ui.finished.connect(self.close_dialog)
+        self.ui.finished.connect(self.force_update)
       self.ui.show()
     else:
       log('actions').warn("%s: no activation", self.__class__)
