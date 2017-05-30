@@ -18,7 +18,7 @@ matrix:
       env: PROJECT=server ENV=docker
       services: docker
     - python: "2.7"
-      env: PROJECT=setup.py
+      env: PROJECT=setup.py DJANGO_SETTINGS_MODULE='rematch.settings.docker'
 
 branches:
   only:
@@ -33,8 +33,8 @@ before_install:
     - git submodule update --init --recursive
 
 install:
+  - set +vx;
   - if [ ${ENV} = "conda" ]; then
-      set +vx;
       if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
         wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
       else
@@ -56,7 +56,8 @@ install:
       cd ${PROJECT} ;
       service docker start ;
       docker-compose build ;
-      docker-compose up ;
+      docker-compose up -d ;
+      cd ../ ;
     fi;
   - if [ -f ${PROJECT}/requirements.txt ]; then pip install -r ${PROJECT}/requirements.txt ; fi
   - if [ -f tests/${PROJECT}/requirements.txt ]; then pip install -r tests/${PROJECT}/requirements.txt ; fi
