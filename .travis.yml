@@ -69,7 +69,6 @@ install:
   - pip install flake8
 
 before_script:
-  - ps aux | grep mysql
   - if [ ${PROJECT} = "server" ]; then mysql -e 'SHOW VARIABLES LIKE "%version%";' ; fi ;
 
 script:

@@ -18,20 +18,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = False
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-
-
-# As of django 1.10, allowed hosts are validated in debug as well,
-# this disables that and makes sure all hosts are acceptible when
-# running in debug mode. for more details see
-# https://docs.djangoproject.com/en/1.10/ref/settings/
-# for security implications see
-# https://docs.djangoproject.com/en/1.10/topics/security/ \
-# #host-headers-virtual-hosting
-ALLOWED_HOSTS = ['*']
-
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = "/rematch_server/static/"
 
@@ -89,10 +75,6 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 
 # docker conf
-REDIS_PORT = 6379
-REDIS_DB = 0
-REDIS_HOST = os.environ.get('REDIS_PORT_6379_TCP_ADDR', 'redis')
-
 RABBIT_HOSTNAME = os.environ.get('RABBIT_PORT_5672_TCP', 'rabbitmq')
 
 if RABBIT_HOSTNAME.startswith('tcp://'):
@@ -137,11 +119,6 @@ CELERY_DISABLE_RATE_LIMITS = False
 CELERY_IGNORE_RESULT = True
 CELERY_SEND_TASK_ERROR_EMAILS = False
 CELERY_TASK_RESULT_EXPIRES = 600
-
-# Set redis as celery result backend
-# CELERY_RESULT_BACKEND = 'redis://%s:%d/%d'\
-#  %(REDIS_HOST, REDIS_PORT, REDIS_DB)
-CELERY_REDIS_MAX_CONNECTIONS = 1
 
 # Don't use pickle as serializer, json is much safer
 CELERY_TASK_SERIALIZER = "json"
