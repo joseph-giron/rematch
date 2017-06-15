@@ -11,6 +11,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get autoremove -yq
 RUN mkdir /rematch_server
 WORKDIR /rematch_server
 ADD . ./
+ADD ../tests/server/ ./tests/
 RUN pip install --upgrade pip
 RUN pip install -r /rematch_server/requirements.txt
 RUN pip install uwsgi
