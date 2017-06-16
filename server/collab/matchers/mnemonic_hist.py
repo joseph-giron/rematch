@@ -1,9 +1,7 @@
 from . import hist_matcher
 
-import sklearn.metric.pairwise.euclidean_distances as cmp_fn
 
-
-class MnemonicHistogramMatcher(hist_matcher.PairwiseMatcher):
+class MnemonicHistogramMatcher(hist_matcher.HistogramMatcher):
   vector_type = 'mnemonic_hist'
   match_type = 'mnemonic_hist'
   matcher_name = "Mnemonic Histogram"

@@ -6,11 +6,12 @@ from .assembly_hash import AssemblyHashMatcher
 from .mnemonic_hash import MnemonicHashMatcher
 from .name_hash import NameHashMatcher
 from .mnemonic_hist import MnemonicHistogramMatcher
+from .pairwise_matcher import PairwiseMatcher
 
 
 matchers_list = [IdentityHashMatcher, NameHashMatcher, AssemblyHashMatcher,
-                 MnemonicHashMatcher, MnemonicHistogramMatcher]
+                 MnemonicHashMatcher, MnemonicHistogramMatcher, PairwiseMatcher]
 
 __all__ = ['Matcher', 'HashMatcher', 'HistogramMatcher', 'IdentityHashMatcher',
            'AssemblyHashMatcher', 'MnemonicHashMatcher', 'NameHashMatcher',
-           'MnemonicHistogramMatcher', 'matchers_list']
+           'MnemonicHistogramMatcher', 'PairwiseMatcher', 'matchers_list']
