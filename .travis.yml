@@ -63,9 +63,10 @@ install:
       docker-compose -f ./${PROJECT}/docker-compose.yml up -d ;
       if [ -f ./tests/${PROJECT}/requirements.txt ]; then
         docker-compose -f ./${PROJECT}/docker-compose.yml exec web pip install -r ./tests/requirements.txt ;
+        docker-compose -f ./${PROJECT}/docker-compose.yml exec web pip install pytest-cov coveralls ;
       fi ;
     fi;
-  - pip install flake8 pytest-cov coveralls
+  - pip install flake8
 
 before_script:
   - if [ ${PROJECT} = "server" ]; then mysql -e 'SHOW VARIABLES LIKE "%version%";' ; fi ;
