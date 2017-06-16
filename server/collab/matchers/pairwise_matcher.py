@@ -4,13 +4,12 @@ import json
 import numpy as np
 import sklearn as skl
 import sklearn.metrics  # noqa flake8 importing as a different name
-import sklearn.preprocessing  # noqa flake8 importing as a different name
 import sklearn.feature_extraction  # noqa flake8 importing as a different name
 
 from . import matcher
 
 
-class HistogramMatcher(matcher.Matcher):
+class PairwiseMatcher(matcher.Matcher):
   @staticmethod
   def match(source, target):
     source_values = itertools.izip(*source.values_list('instance_id', 'data'))
@@ -28,10 +27,12 @@ class HistogramMatcher(matcher.Matcher):
     print("source matrix: {}, target matrix: {}".format(source_matrix.shape,
                                                         target_matrix.shape))
 
-    distance_matrix = skl.metrics.pairwise.euclidean_distances(source_matrix,
-                                                               target_matrix)
-    print("min, max dist: {}, {}".format(distance_matrix.min(),
-                                         distance_matrix.max()))
+    distance_matrix = skl.metrics.pairwise_matcher(source_matrix,
+                                                   target_matrix,
+                                                   cmp_fn)
+    max_distance = distance_matrix.max()
+    score_matrix = (1 - (distance_matrix / max_distance)) * 100
+    print("min, max dist: {}, {}".format(distance_matrix.min(), max_distance))
 
     distance_matrix = (1 - (distance_matrix / distance_matrix.max())) * 100
     for source_i, target_i in np.ndindex(*distance_matrix.shape):
