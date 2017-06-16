@@ -62,7 +62,7 @@ install:
       docker-compose -f ./${PROJECT}/docker-compose.yml build ;
       docker-compose -f ./${PROJECT}/docker-compose.yml up -d ;
       if [ -f ./tests/${PROJECT}/requirements.txt ]; then
-        docker-compose -f ./${PROJECT}/docker-compose.yml exec web pip install -r ./tests/requirements.txt ;
+        docker-compose -f ./${PROJECT}/docker-compose.yml exec web pip install -r ./tests/${PROJECT}/requirements.txt ;
         docker-compose -f ./${PROJECT}/docker-compose.yml exec web pip install pytest-cov ;
       fi ;
     fi;
@@ -76,7 +76,7 @@ script:
   - if [ -d ./tests/${PROJECT} ]; then
       flake8 ./tests/${PROJECT} --show-source ;
       if [ ${ENV} = "conda" ]; then PYTHONPATH=. py.test ./${PROJECT} ./tests/${PROJECT} --verbose --cov-report= --cov=$PROJECT ; fi ;
-      if [ ${ENV} = "docker" ]; then docker-compose -f ./${PROJECT}/docker-compose.yml exec web py.test ./ --verbose --cov-report= --cov=$PROJECT ; fi ;
+      if [ ${ENV} = "docker" ]; then docker-compose -f ./${PROJECT}/docker-compose.yml exec web py.test ./${PROJECT} ./tests/${PROJECT} --verbose --cov-report= --cov=$PROJECT ; fi ;
     fi;
 
 after_script:
