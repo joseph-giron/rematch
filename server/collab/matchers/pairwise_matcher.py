@@ -27,7 +27,9 @@ class PairwiseMatcher(matcher.Matcher):
     print("source matrix: {}, target matrix: {}".format(source_matrix.shape,
                                                         target_matrix.shape))
 
-    distance_matrix = skl.metrics.pairwise_distances(x=source_matrix,y=target_matrix,metric=cls.cmp_fn)
+    distance_matrix = skl.metrics.pairwise_distances(source_matrix,
+                                                     target_matrix,
+                                                     metric=cls.cmp_fn)
     max_distance = distance_matrix.max()
     score_matrix = (1 - (distance_matrix / max_distance)) * 100
     print("min, max dist: {}, {}".format(distance_matrix.min(), max_distance))
