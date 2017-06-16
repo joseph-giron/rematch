@@ -63,10 +63,9 @@ install:
       docker-compose -f ./${PROJECT}/docker-compose.yml up -d ;
       if [ -f ./tests/${PROJECT}/requirements.txt ]; then
         docker-compose -f ./${PROJECT}/docker-compose.yml exec web pip install -r ./tests/requirements.txt ;
-        docker-compose -f ./${PROJECT}/docker-compose.yml exec web pip install pytest-cov coveralls ;
       fi ;
     fi;
-  - pip install flake8
+  - pip install flake8 pytest-cov coveralls
 
 before_script:
   - if [ ${PROJECT} = "server" ]; then mysql -e 'SHOW VARIABLES LIKE "%version%";' ; fi ;
@@ -81,6 +80,6 @@ script:
 
 after_script:
   - if [ -d ./tests/${PROJECT} ]; then
-      if [ ${ENV} = "conda" ]; then coveralls ; fi ;
-      if [ ${ENV} = "docker" ]; then docker-compose -f ./${PROJECT}/docker-compose.yml  exec web bash -c "export TRAVIS=${TRAVIS}; export TRAVIS_JOB_ID=${TRAVIS_JOB_ID}; export TRAVIS_BRANCH=${TRAVIS_BRANCH}; coveralls" ; fi ;
+      if [ ${ENV} = "docker" ]; then docker-compose -f ./${PROJECT}/docker-compose.yml cp web:.coverage ./.coverage ; fi ;
+      coveralls ;
     fi;
