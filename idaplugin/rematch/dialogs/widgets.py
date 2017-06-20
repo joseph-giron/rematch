@@ -66,18 +66,19 @@ class QItemCheckBoxes(QtWidgets.QGridLayout):
 
     self.checkboxes = []
     for i, obj in enumerate(response):
-      item_name = obj[self.name_field]
-      item_id = obj[self.id_field]
+      if obj != {}:
+        item_name = obj[self.name_field]
+        item_id = obj[self.id_field]
 
-      if self.exclude and (item_name in self.exclude or
-                           item_id in self.exclude):
-        continue
+        if self.exclude and (item_name in self.exclude or
+                             item_id in self.exclude):
+          continue
 
-      checkbox_widget = QtWidgets.QCheckBox(item_name)
-      checkbox_widget.id = item_id
-      checkbox_widget.setChecked(True)
-      self.addWidget(checkbox_widget, i / self.columns, i % self.columns)
-      self.checkboxes.append(checkbox_widget)
+        checkbox_widget = QtWidgets.QCheckBox(item_name)
+        checkbox_widget.id = item_id
+        checkbox_widget.setChecked(True)
+        self.addWidget(checkbox_widget, i / self.columns, i % self.columns)
+        self.checkboxes.append(checkbox_widget)
 
   def get_result(self):
     return [cb.id for cb in self.checkboxes if cb.isChecked()]
