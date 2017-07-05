@@ -10,7 +10,7 @@ from .pairwise_matcher import PairwiseMatcher
 
 
 matchers_list = [IdentityHashMatcher, NameHashMatcher, AssemblyHashMatcher,
-                 MnemonicHashMatcher, MnemonicHistogramMatcher, PairwiseMatcher]
+                 MnemonicHashMatcher, MnemonicHistogramMatcher]
 
 __all__ = ['Matcher', 'HashMatcher', 'HistogramMatcher', 'IdentityHashMatcher',
            'AssemblyHashMatcher', 'MnemonicHashMatcher', 'NameHashMatcher',
