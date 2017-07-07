@@ -78,7 +78,7 @@ class TaskViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
                   mixins.DestroyModelMixin, mixins.ListModelMixin,
                   viewsets.GenericViewSet):
   queryset = Task.objects.all()
-  permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+  permission_classes = (permissions.IsAuthenticated,
                         IsOwnerOrReadOnly)
   filter_fields = ('task_id', 'created', 'finished', 'owner', 'status')
 
