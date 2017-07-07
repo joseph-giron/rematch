@@ -270,6 +270,7 @@ def test_matchers_abstract(admin_client):
   from collab import matchers
   matchers.matchers_list.append(matchers.Matcher)
 
-  response = admin_client.get('/collab/matches/matchers/',
-                              content_type="application/json")
-  assert_response(response, status.HTTP_200_OK, matchers_list)
+  with pytest.raises(Exception) as ex:
+    admin_client.get('/collab/matches/matchers/',
+                     content_type="application/json")
+  assert ex.value.args[0] == "Abstract matcher in list"
