@@ -116,8 +116,8 @@ class MatchResultDialog(gui.GuiDialog):
     self.finalize_matches()
     self.populate_tree()
     self.set_checks()
-    super(MatchResultDialog, self).show(*args, **kwargs)
     self.graph_dialog.Show()
+    super(MatchResultDialog, self).show(*args, **kwargs)
 
   def get_obj(self, obj_id):
     if obj_id in self.locals:
