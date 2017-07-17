@@ -207,7 +207,7 @@ class MatchResultDialog(gui.GuiDialog):
                                                 len(self.matched_map))
     for local_item, remote_item in self.enumerate_items():
       if remote_item.checkState(self.CHECKBOX_COLUMN):
-        local_offset = self.get_obj(local_item.api_id)
+        local_offset = self.get_obj(local_item.api_id)['offset']
         if remote_item.api_id in self.matched_map:
           self.matched_map[remote_item.api_id].append(local_offset)
         else:
@@ -219,15 +219,12 @@ class MatchResultDialog(gui.GuiDialog):
     q.start(self.handle_apply_matches)
 
   def handle_apply_matches(self, response):
-    print(response)
     for annotation in response:
-      print(annotation)
       remote_id = annotation['instance']
       local_offsets = self.matched_map[remote_id]
-      annotations_data = annotation['data']
 
       for local_offset in local_offsets:
-        collectors.apply(local_offset, annotations_data)
+        collectors.apply(local_offset, annotation)
 
   def clear_checks(self):
     for _, remote_item in self.enumerate_items():
