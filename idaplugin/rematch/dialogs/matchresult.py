@@ -203,8 +203,6 @@ class MatchResultDialog(gui.GuiDialog):
     return sum(1 for _ in self.enumerate_items())
 
   def apply_matches(self):
-    self.apply_pbar = QtWidgets.QProgressDialog("", "&Cancel", 0,
-                                                len(self.matched_map))
     for local_item, remote_item in self.enumerate_items():
       if remote_item.checkState(self.CHECKBOX_COLUMN):
         local_offset = self.get_obj(local_item.api_id)['offset']
@@ -212,6 +210,9 @@ class MatchResultDialog(gui.GuiDialog):
           self.matched_map[remote_item.api_id].append(local_offset)
         else:
           self.matched_map[remote_item.api_id] = [local_offset]
+
+    item_count = sum(len(m) for m in self.matched_map.values())
+    self.apply_pbar = QtWidgets.QProgressDialog("", "&Cancel", 0, item_count)
 
     q = network.QueryWorker("GET", "collab/annotations/", json=True,
                             params={"instance": self.matched_map.keys()},
@@ -225,6 +226,7 @@ class MatchResultDialog(gui.GuiDialog):
 
       for local_offset in local_offsets:
         collectors.apply(local_offset, annotation)
+        self.apply_pbar.setValue(self.apply_pbar.value() + 1)
 
   def clear_checks(self):
     for _, remote_item in self.enumerate_items():
