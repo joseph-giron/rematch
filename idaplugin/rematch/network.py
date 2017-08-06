@@ -7,7 +7,7 @@ from cookielib import CookieJar
 from json import loads, dumps
 
 import exceptions
-from . import config, log
+from . import config, log, utils
 
 # building opener
 cookiejar = CookieJar()
@@ -74,7 +74,8 @@ class QueryWorker(QtCore.QRunnable):
     self.started = True
 
     if requeue:
-      callback = utils.ida_kernel_queue(callback, write=(requeue == 'write'))
+      requeue = requeue == 'write'
+      callback = utils.ida_kernel_queue(write=requeue)(callback)
 
     if callback:
       self.signals.result_dict.connect(callback)
