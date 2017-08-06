@@ -1,5 +1,7 @@
 from idasix import QtCore
+import ida_kernwin
 
+import functools
 import urllib
 import urllib2
 from urlparse import urlparse
@@ -59,11 +61,22 @@ class QueryWorker(QtCore.QRunnable):
 
     self.signals = WorkerSignals()
 
-  def start(self, callback=None, exception_callback=None):
+  def start(self, callback=None, exception_callback=None, requeue=None):
     if self.started:
       raise Exception("query worker already started")
+
+    if requeue and not callback:
+      raise Exception("cannot requeue without a callable")
+
+    if requeue not in (None, 'read', 'write'):
+      raise Exception("requeue possible values are: None, 'read' or 'write', "
+                      "got: {}".format(requeue))
+
     self.running = True
     self.started = True
+
+    if requeue:
+      callback = build_requeue_callback(callback, requeue)
 
     if callback:
       self.signals.result_dict.connect(callback)
@@ -126,6 +139,17 @@ class QueryWorker(QtCore.QRunnable):
 
 def default_exception_callback(exception):
   raise exception
+
+
+def build_requeue_callback(callback, requeue):
+  reqf = ida_kernwin.MFF_READ if requeue == 'read' else ida_kernwin.MFF_WRITE
+  reqf |= ida_kernwin.MFF_NOWAIT
+
+  def enqueue(*args, **kwargs):
+    partial_callback = functools.partial(callback, *args, **kwargs)
+    return ida_kernwin.execute_sync(partial_callback, reqf)
+
+  return enqueue
 
 
 def build_params(method, params):
