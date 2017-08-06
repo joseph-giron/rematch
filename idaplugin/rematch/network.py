@@ -1,7 +1,5 @@
 from idasix import QtCore
-import ida_kernwin
 
-import functools
 import urllib
 import urllib2
 from urlparse import urlparse
@@ -76,7 +74,7 @@ class QueryWorker(QtCore.QRunnable):
     self.started = True
 
     if requeue:
-      callback = build_requeue_callback(callback, requeue)
+      callback = utils.ida_kernel_queue(callback, write=(requeue == 'write'))
 
     if callback:
       self.signals.result_dict.connect(callback)
@@ -139,17 +137,6 @@ class QueryWorker(QtCore.QRunnable):
 
 def default_exception_callback(exception):
   raise exception
-
-
-def build_requeue_callback(callback, requeue):
-  reqf = ida_kernwin.MFF_READ if requeue == 'read' else ida_kernwin.MFF_WRITE
-  reqf |= ida_kernwin.MFF_NOWAIT
-
-  def enqueue(*args, **kwargs):
-    partial_callback = functools.partial(callback, *args, **kwargs)
-    return ida_kernwin.execute_sync(partial_callback, reqf)
-
-  return enqueue
 
 
 def build_params(method, params):
