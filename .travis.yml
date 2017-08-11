@@ -77,6 +77,4 @@ script:
   - if [ ${PROJECT} = "setup.py" ]; then python ./setup.py idaplugin install ; fi ;
 
 after_script:
-  - if [ -d ./tests/${PROJECT}/ ]; then
-      if [ ${ENV} != "docker" ]; then coveralls ; fi ;
-    fi;
+  - if [ -d ./tests/${PROJECT} ] && [ ${ENV} != "docker" ]; then coveralls ; echo "./tests/${PROJECT}" ; fi ;
