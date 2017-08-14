@@ -17,7 +17,7 @@ matrix:
     - python: "2.7"
       env: PROJECT=server DJANGO_SETTINGS_MODULE='rematch.settings.docker' ENV=docker
       services: docker
-    - python: "3.6"
+    - python: "3.5"
       env: PROJECT=setup.py
 
 branches:
