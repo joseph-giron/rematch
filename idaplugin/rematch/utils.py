@@ -1,8 +1,6 @@
 import os
 import functools
 
-import logger
-
 import idc
 import ida_kernwin
 
@@ -22,17 +20,19 @@ class ida_kernel_queue(object):
     if not self.wait:
       self.reqf |= ida_kernwin.MFF_NOWAIT
 
+    self.__ret = None
+    self.called = False
+
   def __call__(self, callback):
+    if self.called:
+      raise Exception("Can't be called twice!")
+    self.called = True
+
     @functools.wraps(callback)
     def enqueue(*args, **kwargs):
-      partial_callback = functools.partial(callback, *args, **kwargs)
-      r = ida_kernwin.execute_sync(partial_callback, self.reqf)
-      if r == -1:
-        msg = ("Possible failure in queueing for main thread with callback: "
-               "{}, reqf: {}, args: {}, kwargs: {}".format(callback, self.reqf,
-                                                           args, kwargs))
-        logger.log('ida_main').warn(msg)
-      elif self.wait:
-        return r
+      def partial_callback():
+        self.__ret = callback(*args, **kwargs)
+      ida_kernwin.execute_sync(partial_callback, self.reqf)
+      return self.__ret
 
     return enqueue
