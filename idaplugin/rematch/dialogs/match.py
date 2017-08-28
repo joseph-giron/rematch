@@ -32,9 +32,8 @@ class MatchDialog(gui.GuiDialog):
     self.base_layout.addWidget(self.targetGrp)
 
     self.matchers = widgets.QItemCheckBoxes(item='matches/matchers',
-                                            name_field='matcher_name',
-                                            description_field='matcher_description',
-                                            id_field='match_type')
+                                            'matcher_name', 'match_type',
+                                            'matcher_description')
 
     method_gbx = QtWidgets.QGroupBox("Match methods")
     method_gbx.setLayout(self.matchers)
