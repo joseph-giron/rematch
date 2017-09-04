@@ -18,4 +18,7 @@ dialogs = recurse_subclasses({idaplugin.rematch.dialogs.base.BaseDialog})
 
 @pytest.mark.parametrize("dialog_entry", dialogs)
 def test_dialog(dialog_entry, idapro_app):
-  pass
+  try:
+    dialog = dialog_entry()
+  except TypeError as ex:
+    pytest.skip(str(ex))
