@@ -14,6 +14,7 @@ def recurse_subclasses(classes):
 
 
 dialogs = recurse_subclasses({idaplugin.rematch.dialogs.base.BaseDialog})
+dialogs = sorted(dialogs)
 
 
 @pytest.mark.parametrize("dialog_entry", dialogs)
