@@ -32,7 +32,6 @@ class PairwiseMatcher(matcher.Matcher):
                                                      target_matrix,
                                                      metric=cmp_fn)
     max_distance = distance_matrix.max()
-    score_matrix = (1 - (distance_matrix / max_distance)) * 100
     print("min, max dist: {}, {}".format(distance_matrix.min(), max_distance))
 
     distance_matrix = (1 - (distance_matrix / distance_matrix.max())) * 100
