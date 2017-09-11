@@ -1,4 +1,4 @@
-from . import pairwise_matcher
+from . import dictionary_matcher
 from sklearn.metrics.pairwise import euclidean_distances
 
 

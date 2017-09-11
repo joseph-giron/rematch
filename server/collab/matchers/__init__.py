@@ -6,7 +6,7 @@ from .assembly_hash import AssemblyHashMatcher
 from .mnemonic_hash import MnemonicHashMatcher
 from .name_hash import NameHashMatcher
 from .mnemonic_hist import MnemonicHistogramMatcher
-from .pairwise_matcher import PairwiseMatcher
+from .dictionary_matcher import DictionaryMatcher
 
 
 matchers_list = [IdentityHashMatcher, NameHashMatcher, AssemblyHashMatcher,
@@ -14,4 +14,4 @@ matchers_list = [IdentityHashMatcher, NameHashMatcher, AssemblyHashMatcher,
 
 __all__ = ['Matcher', 'HashMatcher', 'HistogramMatcher', 'IdentityHashMatcher',
            'AssemblyHashMatcher', 'MnemonicHashMatcher', 'NameHashMatcher',
-           'MnemonicHistogramMatcher', 'PairwiseMatcher', 'matchers_list']
+           'MnemonicHistogramMatcher', 'DictionaryMatcher', 'matchers_list']

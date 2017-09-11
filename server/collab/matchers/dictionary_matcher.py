@@ -9,7 +9,7 @@ import sklearn.feature_extraction  # noqa flake8 importing as a different name
 from . import matcher
 
 
-class PairwiseMatcher(matcher.Matcher):
+class DictionaryMatcher(matcher.Matcher):
   @classmethod
   def match(cls, source, target):
     source_values = itertools.izip(*source.values_list('instance_id', 'data'))
@@ -27,12 +27,9 @@ class PairwiseMatcher(matcher.Matcher):
     print("source matrix: {}, target matrix: {}".format(source_matrix.shape,
                                                         target_matrix.shape))
 
-    cmp_fn = staticmethod(cls.cmp_fn)
-    distance_matrix = skl.metrics.pairwise_distances(source_matrix,
-                                                     target_matrix,
-                                                     metric=cmp_fn)
-    max_distance = distance_matrix.max()
-    print("min, max dist: {}, {}".format(distance_matrix.min(), max_distance))
+    distance_matrix = cls.cmp_fn(source_matrix, target_matrix)
+    print("min, max dist: {}, {}".format(distance_matrix.min(),
+                                         distance_matrix.max()))
 
     distance_matrix = (1 - (distance_matrix / distance_matrix.max())) * 100
     for source_i, target_i in np.ndindex(*distance_matrix.shape):
