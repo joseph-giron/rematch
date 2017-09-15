@@ -21,5 +21,7 @@ dialogs = sorted(dialogs)
 def test_dialog(dialog_entry, idapro_app):
   try:
     dialog = dialog_entry()
+    dialog.show()
+    idapro_app.processEvents()
   except TypeError as ex:
     pytest.skip(str(ex))
