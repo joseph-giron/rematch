@@ -18,11 +18,14 @@ dialogs = sorted(dialogs)
 
 
 known_failing_dialogs = ('MatchDialog', 'AddFileDialog', 'MatchResultDialog')
+
+
 @pytest.mark.parametrize("dialog_entry", dialogs)
 def test_dialog(dialog_entry, idapro_app):
   try:
     dialog = dialog_entry()
-    dialog.show()
+    if hasattr(dialog, 'show'):
+      dialog.show()
     idapro_app.processEvents()
   except Exception as ex:
     if dialog_entry.__name__ in known_failing_dialogs:
