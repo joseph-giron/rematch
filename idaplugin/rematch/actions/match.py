@@ -48,8 +48,6 @@ class MatchAction(base.BoundFileAction):
     except TypeError:
       pass
 
-    if not self.pbar.wasCanceled():
-      self.pbar.cancel()
     try:
       self.pbar.accepted.disconnect()
     except TypeError:
@@ -98,10 +96,6 @@ class MatchAction(base.BoundFileAction):
   def response_handler(self, file_version):
     self.file_version_id = file_version['id']
 
-    self.pbar = QtWidgets.QProgressDialog()
-    self.pbar.canceled.connect(self.cancel)
-    self.pbar.rejected.connect(self.cancel)
-
     if file_version['newly_created']:
       self.start_upload()
     else:
@@ -114,6 +108,9 @@ class MatchAction(base.BoundFileAction):
 
     self.functions = set(idautils.Functions())
 
+    self.pbar = QtWidgets.QProgressDialog()
+    self.pbar.canceled.connect(self.cancel)
+    self.pbar.rejected.connect(self.cancel)
     self.pbar.setLabelText("Processing IDB... You may continue working,\nbut "
                            "please avoid making any ground-breaking changes.")
     self.pbar.setRange(0, len(self.functions))
@@ -182,6 +179,9 @@ class MatchAction(base.BoundFileAction):
     r = network.query("POST", "collab/tasks/", params=params, json=True)
     self.task_id = r['id']
 
+    self.pbar = QtWidgets.QProgressDialog()
+    self.pbar.canceled.connect(self.cancel)
+    self.pbar.rejected.connect(self.cancel)
     self.pbar.setLabelText("Waiting for remote matching... You may continue "
                            "working without any limitations.")
     self.pbar.setRange(0, int(r['progress_max']) if r['progress_max'] else 0)
@@ -222,6 +222,9 @@ class MatchAction(base.BoundFileAction):
     self.start_results()
 
   def start_results(self):
+    self.pbar = QtWidgets.QProgressDialog()
+    self.pbar.canceled.connect(self.cancel)
+    self.pbar.rejected.connect(self.cancel)
     self.pbar.setLabelText("Receiving match results...")
     self.pbar.setRange(0, 0)
     self.pbar.setValue(0)
