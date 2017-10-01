@@ -33,7 +33,7 @@ collab_models = {'projects': {'name': 'test_project_1', 'private': False,
                  'instances': {'offset': 0, 'type': 'function', 'vectors': [],
                                'annotations': []},
                  'vectors': {'type': 'assembly_hash', 'type_version': 0,
-                             'data': 'data'}}
+                             'data': 'data', 'size': 0}}
 
 collab_models_keys = collab_models.keys()
 
@@ -44,7 +44,8 @@ collab_model_objects = {'projects': partial(Project, private=False),
                         'tasks': partial(Task, matchers=requested_matchers),
                         'instances': partial(Instance, offset=0),
                         'vectors': partial(Vector, type='assembly_hash',
-                                           data='data', type_version=0),
+                                           data='data', type_version=0,
+                                           size=0),
                         'rand_hash': partial(rand_hash, 32)}
 
 collab_model_reqs = {'projects': {},
