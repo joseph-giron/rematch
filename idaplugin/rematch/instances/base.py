@@ -8,7 +8,8 @@ class BaseInstance(object):
     self.vectors = {collectors.vectors.NameHashVector}
     self.annotations = {collectors.annotations.NameAnnotation}
 
-  def size(self):
+  @staticmethod
+  def size():
     return 0
 
   def serialize(self):
