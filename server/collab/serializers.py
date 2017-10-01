@@ -86,7 +86,7 @@ class InstanceVectorSerializer(serializers.ModelSerializer):
   class NestedVectorSerializer(serializers.ModelSerializer):
     class Meta(object):
       model = Vector
-      fields = ('id', 'type', 'type_version', 'data')
+      fields = ('id', 'type', 'type_version', 'data', 'size')
 
   class NestedAnnotationSerializer(serializers.ModelSerializer):
     class Meta(object):
@@ -134,7 +134,7 @@ class VectorSerializer(serializers.ModelSerializer):
   class Meta(object):
     model = Vector
     fields = ('id', 'file', 'file_version', 'instance', 'type', 'type_version',
-              'data')
+              'data', 'size')
 
 
 class MatchSerializer(serializers.ModelSerializer):

@@ -93,6 +93,7 @@ class Vector(models.Model):
   type = models.CharField(max_length=64, choices=TYPE_CHOICES)
   type_version = models.IntegerField()
   data = models.TextField()
+  size = models.IntegerField()
 
   def __unicode__(self):
     return "{} vector version {} for {}".format(self.get_type_display(),
