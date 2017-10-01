@@ -9,9 +9,10 @@ class Vector(object):
     data = cls.data(offset)
     if not data:
       return None
+    data, size = data
 
     data = json.dumps(data)
-    return {"instance": instance_id, "type": cls.type,
+    return {"instance": instance_id, "type": cls.type, "size": size,
             "type_version": cls.type_version, "data": data}
 
   @staticmethod

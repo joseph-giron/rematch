@@ -24,4 +24,4 @@ class AssemblyHashVector(vector.Vector):
       asm_line = " ".join(asm_line.split())
       asm_line = asm_line.lower()
       md5.update(asm_line)
-    return md5.hexdigest()
+    return md5.hexdigest(), 1

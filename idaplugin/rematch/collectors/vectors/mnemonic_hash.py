@@ -21,4 +21,4 @@ class MnemonicHashVector(vector.Vector):
       mnem_line = mnem_line.strip()
       mnem_line = mnem_line.lower()
       md5.update(mnem_line)
-    return md5.hexdigest()
+    return md5.hexdigest(), 1

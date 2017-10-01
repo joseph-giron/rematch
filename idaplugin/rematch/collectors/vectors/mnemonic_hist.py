@@ -19,4 +19,5 @@ class MnemonicHistVector(vector.Vector):
       mnem_line = mnem_line.lower()
       instruction_hist[mnem_line] += 1
 
-    return instruction_hist
+    size = sum(instruction_hist.values())
+    return instruction_hist, size

@@ -34,4 +34,4 @@ class IdentityHashVector(vector.Vector):
         continue
       for i in range(ea + 1, ea + idc.ItemSize(ea)):
         h = cls._cycle(h, idc.Byte(i))
-    return h
+    return h, 1

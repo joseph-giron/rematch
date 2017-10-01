@@ -16,4 +16,4 @@ class NameHashVector(vector.Vector):
     if ida_name.is_uname(name):
       return None
 
-    return hashlib.md5(name).hexdigest()
+    return hashlib.md5(name).hexdigest(), 1
