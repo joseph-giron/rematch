@@ -1,4 +1,4 @@
-strictness: high
+strictness: veryhigh
 test-warnings: true
 
 uses:
