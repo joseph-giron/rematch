@@ -1,4 +1,5 @@
-strictness: medium
+strictness: high
+test-warnings: true
 
 uses:
   - django
@@ -11,8 +12,6 @@ python-targets:
 requirements:
   - setup.py
   - server/requirements.txt
-
-test-warnings: true
 
 pylint:
   disable:
