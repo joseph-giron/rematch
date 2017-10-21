@@ -64,6 +64,7 @@ class Instance(models.Model):
   file_version = models.ForeignKey(FileVersion, related_name='instances')
   type = models.CharField(max_length=64, choices=TYPE_CHOICES)
   offset = models.BigIntegerField()
+  size = models.BigIntegerField()
 
   matches = models.ManyToManyField('self', symmetrical=False, through='Match',
                                    related_name='related_to+')
@@ -75,12 +76,14 @@ class Instance(models.Model):
 
 
 class Vector(models.Model):
+  TYPE_INSTRUCTION_HASH = 'instruction_hash'
   TYPE_IDENTITY_HASH = 'identity_hash'
   TYPE_NAME_HASH = 'name_hash'
   TYPE_ASSEMBLY_HASH = 'assembly_hash'
   TYPE_MNEMONIC_HASH = 'mnemonic_hash'
   TYPE_MNEMONIC_HIST = 'mnemonic_hist'
-  TYPE_CHOICES = [(TYPE_IDENTITY_HASH, "Identity Hash"),
+  TYPE_CHOICES = [(TYPE_INSTRUCTION_HASH, "Instruction Hash"),
+                  (TYPE_IDENTITY_HASH, "Identity Hash"),
                   (TYPE_NAME_HASH, "Name Hash"),
                   (TYPE_ASSEMBLY_HASH, "Assembly Hash"),
                   (TYPE_MNEMONIC_HASH, "Mnemonic Hash"),
@@ -123,8 +126,8 @@ class Task(models.Model):
   source_file_version = models.ForeignKey(FileVersion,
                                           related_name='source_tasks')
   # TODO: make sure start > end
-  source_start = models.PositiveIntegerField(null=True)
-  source_end = models.PositiveIntegerField(null=True)
+  source_start = models.BigIntegerField(null=True)
+  source_end = models.BigIntegerField(null=True)
   # TODO: make sure only at least one of target_file/target_project is null
   target_file = models.ForeignKey(File, null=True)
   target_project = models.ForeignKey(Project, null=True)

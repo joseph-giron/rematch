@@ -32,13 +32,11 @@ class MatchAction(base.BoundFileAction):
     self.target_project = None
     self.target_file = None
     self.matchers = None
+    self.recieved = None
 
     self.delayed_queries = []
 
-    self.pbar = QtWidgets.QProgressDialog()
-    self.pbar.hide()
-    self.pbar.canceled.connect(self.cancel)
-    self.pbar.rejected.connect(self.cancel)
+    self.pbar = None
     self.timer = QtCore.QTimer()
 
   def running(self):
@@ -51,13 +49,11 @@ class MatchAction(base.BoundFileAction):
     except TypeError:
       pass
 
-    if not self.pbar.wasCanceled():
-      self.pbar.cancel()
     try:
       self.pbar.accepted.disconnect()
     except TypeError:
       pass
-    self.pbar.hide()
+    self.pbar = None
 
   def cancel_delayed(self):
     for delayed in self.delayed_queries:
@@ -113,6 +109,9 @@ class MatchAction(base.BoundFileAction):
 
     self.functions = set(idautils.Functions())
 
+    self.pbar = QtWidgets.QProgressDialog()
+    self.pbar.canceled.connect(self.cancel)
+    self.pbar.rejected.connect(self.cancel)
     self.pbar.setLabelText("Processing IDB... You may continue working,\nbut "
                            "please avoid making any ground-breaking changes.")
     self.pbar.setRange(0, len(self.functions))
@@ -181,6 +180,9 @@ class MatchAction(base.BoundFileAction):
     r = network.query("POST", "collab/tasks/", params=params, json=True)
     self.task_id = r['id']
 
+    self.pbar = QtWidgets.QProgressDialog()
+    self.pbar.canceled.connect(self.cancel)
+    self.pbar.rejected.connect(self.cancel)
     self.pbar.setLabelText("Waiting for remote matching... You may continue "
                            "working without any limitations.")
     self.pbar.setRange(0, int(r['progress_max']) if r['progress_max'] else 0)
@@ -221,6 +223,9 @@ class MatchAction(base.BoundFileAction):
     self.start_results()
 
   def start_results(self):
+    self.pbar = QtWidgets.QProgressDialog()
+    self.pbar.canceled.connect(self.cancel)
+    self.pbar.rejected.connect(self.cancel)
     self.pbar.setLabelText("Receiving match results...")
     self.pbar.setRange(0, 0)
     self.pbar.setValue(0)
@@ -229,6 +234,8 @@ class MatchAction(base.BoundFileAction):
 
     self.results = MatchResultDialog(self.task_id)
     self.results.finished.connect(self.close_dialog)
+
+    self.recieved = set()
 
     log('match_action').info("Result download started")
     locals_url = "collab/tasks/{}/locals/".format(self.task_id)
@@ -253,11 +260,15 @@ class MatchAction(base.BoundFileAction):
     new_locals = {obj['id']: obj for obj in response['results']}
     self.results.add_locals(new_locals)
 
+    self.recieved.add('locals')
+
     self.handle_page(response)
 
   def handle_remotes(self, response):
     new_remotes = {obj['id']: obj for obj in response['results']}
     self.results.add_remotes(new_remotes)
+
+    self.recieved.add('remotes')
 
     self.handle_page(response)
 
@@ -270,6 +281,8 @@ class MatchAction(base.BoundFileAction):
     new_matches = map(rename, response['results'])
     self.results.add_matches(new_matches)
 
+    self.recieved.add('matches')
+
     self.handle_page(response)
 
   def handle_page(self, response):
@@ -277,7 +290,7 @@ class MatchAction(base.BoundFileAction):
       self.pbar.setMaximum(self.pbar.maximum() + response['count'])
 
     new_value = max(self.pbar.value(), 0) + len(response['results'])
-    if new_value >= self.pbar.maximum():
+    if new_value >= self.pbar.maximum() and len(self.recieved) >= 3:
       self.pbar.accept()
     else:
       self.pbar.setValue(new_value)
