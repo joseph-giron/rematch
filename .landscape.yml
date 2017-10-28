@@ -20,5 +20,10 @@ pylint:
     max-args: 10
 pep8:
   disable:
+    - E111
+    - E113
     - E114
+    - E121
+    - E125
+    - E127
     - E129
