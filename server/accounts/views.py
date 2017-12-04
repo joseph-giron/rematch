@@ -1,5 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 
 
 @api_view(['GET'])
@@ -16,4 +18,5 @@ def profile(request):
                  "last_name": request.user.last_name,
                  "email": request.user.email,
                  })
-  return Response(user)
+  response = json.dumps(user, cls=DjangoJSONEncoder)
+  return Response(response)
