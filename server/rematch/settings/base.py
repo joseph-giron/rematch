@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
-    'djcelery',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,16 +63,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# Backwards compat. with django 1.11
+MIDDLEWARE_CLASSES = MIDDLEWARE
 
 ROOT_URLCONF = 'rematch.urls'
 
@@ -172,8 +172,13 @@ STATIC_URL = '/static/'
 
 
 # Celery configuration
+# use django's database to keep celery state
+result_backend = 'database'
 
-CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+# only fetch one task per execution slot at a time, let multiple workers behave
+worker_prefetch_multiplier = 1
+
+# since most tasks are long and require a lot of memory it is possible to kill
+# worker childs after a small amount of tasks and doing so may mitigate any
+# object leaks
+worker_max_tasks_per_child = 100
